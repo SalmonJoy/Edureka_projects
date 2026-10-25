@@ -1,0 +1,5 @@
+# Shared credentials, including the .env used by RAG_PoC
+.env
+.env.*
+!.env.example
+!.env.template

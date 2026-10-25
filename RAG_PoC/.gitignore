@@ -1,0 +1,52 @@
+# Local Python environments
+.venv/
+venv/
+env/
+
+# Python caches and build output
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+*.egg-info/
+
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+!.env.template
+
+# Generated RAG outputs
+/source/markdown/
+/source/chunks/
+/source/embeddings/
+
+# Test coverage, notebooks, and logs
+.coverage
+.coverage.*
+htmlcov/
+.ipynb_checkpoints/
+*.log
+
+# Temporary files, editor swaps, and backups
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+~$*
+tmp/
+temp/
+.tmp/
+.temp/
+
+# Local editor and operating system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini

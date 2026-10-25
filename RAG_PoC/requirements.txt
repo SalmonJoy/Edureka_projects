@@ -1,0 +1,4 @@
+docling>=2,<3
+markdown-it-py>=3,<5
+python-dotenv>=1,<2
+requests>=2,<3
