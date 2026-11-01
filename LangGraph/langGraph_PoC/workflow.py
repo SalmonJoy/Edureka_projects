@@ -8,6 +8,7 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.types import interrupt
 
 from langGraph_PoC.clients import SubmissionUnknownError, WorkflowError
+from langGraph_PoC.conversation_memory import conversation_context
 from langGraph_PoC.models import ExtractedRequest, LeaveDetails, LeaveState
 
 
@@ -41,6 +42,7 @@ def initial_state(request: str, *, today: date | None = None) -> LeaveState:
     today = today or datetime.now(ZoneInfo("Asia/Kolkata")).date()
     return {
         "original_request": request.strip(), "current_date": today.isoformat(),
+        "messages": [],
         "clarification_history": [], "clarification_question": None,
         "confirmed": False, "status": "understanding", "error": None,
     }
@@ -113,6 +115,7 @@ class LeaveWorkflow:
         try:
             extracted = await self.clients.extract_request({
                 "original_request": state["original_request"],
+                "conversation_history": conversation_context(state.get("messages", [])),
                 "clarification_history": history,
                 "current_date": today.isoformat(),
                 "current_weekday": today.strftime("%A"),
@@ -279,7 +282,7 @@ def build_graph(clients, *, checkpointer=None):
     graph.add_edge(START, "understand_request")
 
     def after_understanding(state):
-        if state["status"] == "error":
+        if state["status"] in ("error", "cancelled"):
             return END
         if state["status"] == "clarifying":
             return "understand_request"

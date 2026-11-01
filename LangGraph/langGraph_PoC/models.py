@@ -6,6 +6,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StringConstraints, model_validator
 
+from langGraph_PoC.conversation_memory import ConversationState
+
 
 NonBlankString = Annotated[str, StringConstraints(strict=True, min_length=1, pattern=r"\S")]
 
@@ -83,8 +85,8 @@ class Clarification(TypedDict):
     answer: str
 
 
-class LeaveState(TypedDict, total=False):
-    # All values stored here are JSON-serializable; clients and keys stay outside state.
+class LeaveState(ConversationState, total=False):
+    # Message objects use LangGraph serialization; clients and keys stay outside state.
     original_request: str
     current_date: str
     clarification_history: list[Clarification]
