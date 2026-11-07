@@ -15,6 +15,7 @@ from langGraph_PoC.clients import WorkflowClients
 from langGraph_PoC.config import load_settings
 from langGraph_PoC.conversation_memory import ConversationMemory, ConversationStorageError, review_text
 from langGraph_PoC.workflow import build_graph, initial_state
+from langGraph_PoC.tracing import workflow_trace
 from langGraph_PoC.workflow_persistence import (
     WorkflowPersistenceError, cancel_workflow, load_thread, open_checkpointer,
     prompt_event_id, saved_conversation_id, thread_config,
@@ -45,6 +46,15 @@ def confirmation_input() -> bool:
 
 async def run_request(graph, request: str | None = None, *, memory=None, thread_id: str | None = None):
     config = thread_config(thread_id if thread_id is not None else str(uuid4()))
+    state = initial_state(request) if thread_id is None and request is not None else None
+    if state is not None and memory is not None:
+        state["conversation_id"] = memory.conversation_id
+    async with workflow_trace(graph, config, state):
+        return await _run_request(graph, request, memory=memory, thread_id=thread_id,
+                                  config=config, state=state)
+
+
+async def _run_request(graph, request, *, memory, thread_id, config, state):
     print("Thread:", config["configurable"]["thread_id"])
     skip_stream = False
     if thread_id is not None:
@@ -56,7 +66,7 @@ async def run_request(graph, request: str | None = None, *, memory=None, thread_
     else:
         if request is None:
             raise ValueError("A leave request is required for a new workflow.")
-        graph_input = initial_state(request)
+        graph_input = state if state is not None else initial_state(request)
         if memory is not None:
             graph_input.update(await memory.start_request(request, config["configurable"]["thread_id"]))
     while True:

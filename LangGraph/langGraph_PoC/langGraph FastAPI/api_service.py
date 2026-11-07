@@ -10,6 +10,7 @@ from langgraph.types import Command
 
 from langGraph_PoC.conversation_memory import ConversationStorageError, review_text
 from langGraph_PoC.workflow import initial_state
+from langGraph_PoC.tracing import workflow_trace
 from langGraph_PoC.workflow_persistence import (
     WorkflowPersistenceError, cancel_workflow, load_thread,
     prompt_event_id, thread_config,
@@ -170,8 +171,9 @@ class WorkflowService:
             async with self._conversation(conversation_id) as memory:
                 state = initial_state(body.request)
                 state.update(await memory.start_request(body.request, thread_id))
-                await self._advance(state, config)
-                return await self._boundary(config, memory)
+                async with workflow_trace(self.graph, config, state):
+                    await self._advance(state, config)
+                    return await self._boundary(config, memory)
         except STORAGE_ERRORS:
             return await self._storage_failure(thread_id, conversation_id)
 
@@ -186,9 +188,9 @@ class WorkflowService:
         try:
             snapshot = await self._snapshot(thread_id)
             conversation_id = self._conversation_id(snapshot)
-            async with self._conversation(conversation_id) as memory:
+            config = thread_config(thread_id)
+            async with self._conversation(conversation_id) as memory, workflow_trace(self.graph, config):
                 snapshot = await self._recoverable(thread_id, conversation_id)
-                config = thread_config(thread_id)
                 if not snapshot.next:
                     if body.prompt_id is not None:
                         raise ApiError(409, "This workflow is complete and is not awaiting an answer.")
@@ -227,9 +229,9 @@ class WorkflowService:
         try:
             snapshot = await self._snapshot(thread_id)
             conversation_id = self._conversation_id(snapshot)
-            async with self._conversation(conversation_id) as memory:
+            config = thread_config(thread_id)
+            async with self._conversation(conversation_id) as memory, workflow_trace(self.graph, config):
                 snapshot = await self._recoverable(thread_id, conversation_id)
-                config = thread_config(thread_id)
                 if snapshot.values.get("status") == "cancelled" and not snapshot.next:
                     return await self._boundary(config, memory)
                 if not snapshot.next or snapshot.values.get("application"):

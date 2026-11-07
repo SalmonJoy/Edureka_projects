@@ -87,6 +87,7 @@ class Clarification(TypedDict):
 
 class LeaveState(ConversationState, total=False):
     # Message objects use LangGraph serialization; clients and keys stay outside state.
+    trace_context: dict[str, str]
     original_request: str
     current_date: str
     clarification_history: list[Clarification]

@@ -2,7 +2,7 @@
 
 A FastAPI wrapper that imports the existing `langGraph_PoC` graph, clients,
 MongoDB message memory, and SQLite helpers. All wrapper code lives in this
-folder. The existing Python files and terminal app are unchanged.
+folder. Shared graph, persistence, and tracing helpers also support the terminal app.
 
 ## Setup and run
 
@@ -15,10 +15,10 @@ cd "C:\Salmon\Edureka\AI agents\LangGraph\langGraph_PoC\langGraph FastAPI"
 .\.venv\Scripts\python.exe -m uvicorn app:app --reload --port 8003
 ```
 
-If the requirements are already installed in your Python environment, run:
+To use the migrated shared environment already installed in the parent folder:
 
 ```powershell
-& "C:\Users\salmo\AppData\Local\Programs\Python\Python311\python.exe" -m uvicorn app:app --reload --port 8003
+..\.venv\Scripts\python.exe -m uvicorn app:app --reload --port 8003
 ```
 
 Open http://127.0.0.1:8003/docs for Swagger UI. The OpenAPI schema is at
@@ -166,6 +166,15 @@ storage fails after a known successful submission, the response includes the
 saved receipt with a warning. It does not repeat the leave POST.
 
 ## Files and tests
+
+LangSmith tracing is initialized by the shared settings loader. Restart this API
+after changing the shared `.env`; Streamlit requests are then traced through this
+backend. See the [parent tracing setup](../README.md#langsmith-tracing). Workflow
+IDs appear as `thread_id` metadata, including clarification/confirmation resumes.
+One **Leave request** parent contains the graph executions and checkpoint updates
+across those resumes. Its IDs survive SQLite recovery. GET requests create no
+traces. No HTTP contracts or confirmation requirements change. Use an environment
+with `langsmith==0.14.17`; restart Uvicorn with that interpreter after migrating.
 
 - `app.py`: FastAPI lifespan, routes, and error responses.
 - `api_service.py`: graph orchestration and per-conversation locks.

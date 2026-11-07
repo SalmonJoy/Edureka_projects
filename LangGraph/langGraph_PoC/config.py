@@ -29,4 +29,7 @@ def load_settings(env_file: Path = ENV_FILE) -> Settings:
     key = (values.get("OLLAMA_API_KEY") or os.getenv("OLLAMA_API_KEY", "")).strip()
     if not key:
         raise ValueError(f"Missing OLLAMA_API_KEY. Set it in {env_file}.")
+    from langGraph_PoC.tracing import configure_tracing
+
+    configure_tracing(env_file)
     return Settings(ollama_api_key=key)

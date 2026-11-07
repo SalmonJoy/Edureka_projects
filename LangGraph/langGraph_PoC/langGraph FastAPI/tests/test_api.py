@@ -25,6 +25,43 @@ from langGraph_PoC.tests.test_workflow import FakeClients, TODAY, extracted, sav
 
 
 class ApiTests(unittest.IsolatedAsyncioTestCase):
+    async def test_tracing_one_parent_across_clarification_restart_and_confirmation(self):
+        from unittest.mock import MagicMock
+        from langsmith import Client
+        from langGraph_PoC import tracing
+
+        sdk = MagicMock(spec=Client)
+        self.clients.extractions = [extracted(reason=None), extracted()]
+        with patch.object(tracing, "_client", sdk), patch.object(tracing, "_project", "test-project"):
+            state = await self.start("Leave November 10-12")
+            tracing.flush_traces()
+            before = sdk.create_run.call_count, sdk.update_run.call_count
+            self.assertEqual((await self.http.get(f"/workflows/{state['thread_id']}")).status_code, 200)
+            self.assertEqual(before, (sdk.create_run.call_count, sdk.update_run.call_count))
+            self.assertEqual(self.clients.submissions, [])
+            await self.close_app()
+            await self.open_app()
+            confirm = (await self.answer(state, "Family vacation")).json()
+            self.assertEqual(confirm["interrupt"]["kind"], "confirmation")
+            self.assertEqual(self.clients.submissions, [])
+            final = await self.answer(confirm, True)
+            self.assertEqual(final.json()["status"], "submitted")
+            self.assertEqual(len(self.clients.submissions), 1)
+            tracing.flush_traces()
+            calls = sdk.create_run.call_args_list
+            parents = [c for c in calls if c.kwargs["name"] == "Leave request"]
+            self.assertEqual(len(parents), 1)
+            root_id = str(parents[0].kwargs["id"])
+            self.assertTrue(all(str(c.kwargs["trace_id"]) == root_id for c in calls))
+            self.assertTrue(all(c.kwargs.get("parent_run_id") for c in calls
+                                if c.kwargs["name"] != "Leave request"))
+            before = sdk.create_run.call_count, sdk.update_run.call_count
+            recovered = await self.http.post(f"/workflows/{state['thread_id']}/resume", json={})
+            self.assertEqual(recovered.json()["application"], final.json()["application"])
+            tracing.flush_traces()
+            self.assertEqual(before, (sdk.create_run.call_count, sdk.update_run.call_count))
+            self.assertEqual(len(self.clients.submissions), 1)
+
     async def asyncSetUp(self):
         self.temp = TemporaryDirectory(prefix="langgraph-fastapi-test-")
         self.db_path = Path(self.temp.name) / "workflow_state.sqlite"

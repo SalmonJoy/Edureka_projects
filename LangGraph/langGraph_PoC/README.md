@@ -244,6 +244,81 @@ If rejection-message generation fails, the recorded reasons are displayed. If
 success-message generation fails after the application is saved, the app
 returns a factual receipt from the saved API response without repeating the POST.
 
+## LangSmith tracing
+
+Terminal and FastAPI workflows (including requests from Streamlit) use the shared
+`C:\Salmon\Edureka\AI agents\.env` for ongoing tracing. Configure:
+
+```dotenv
+LANGSMITH_TRACING=true
+LANGSMITH_ENDPOINT=https://apac.api.smith.langchain.com
+LANGSMITH_API_KEY=<your-key>
+LANGSMITH_AGENT_ID=<your-existing-agent-identifier>
+LANGSMITH_AGENT_ENVIRONMENT=local
+# LANGSMITH_WORKSPACE_ID=<workspace-id-if-required>
+```
+
+File values take precedence over inherited settings. Restart terminal/FastAPI
+processes after changing configuration. Set `LANGSMITH_TRACING=false` in the file
+to disable tracing. The Streamlit app needs no LangSmith credentials.
+
+The small `tracing.py` module resolves the existing agent environment's
+`tracer_session_name` using a read-only API call with a 10-second timeout. It
+passes that compatibility destination and an explicit LangSmith client through
+LangChain callbacks. LangSmith is pinned to `0.14.17`; the graph stack stays at
+its existing versions. Use the project virtual environment: an unrelated legacy
+`langchain` package in a shared Python installation can constrain LangSmith to an
+obsolete version. Automatic
+environment tracing is disabled inside the process to prevent a second SDK client
+from tracing to an inherited/default project. No agents or projects are created.
+
+In LangSmith, open the configured agent's Tracing view and select the configured
+environment. Graph nodes, parallel lookups, Ollama calls, durations, and failures
+are recorded beneath one **Leave request** parent per workflow. Clarifications,
+confirmation resumes, and transcript checkpoint updates remain children of that
+parent instead of separate top-level traces. Filter by metadata `thread_id` to
+find it. The parent identifiers are saved in SQLite and reused after a restart;
+no credentials or client objects are stored there. A pause leaves the parent
+pending, and completion/cancellation ends it. Duration includes the time spent
+waiting for human answers. Submission still requires explicit approval. Read-only
+workflow GETs and completed-workflow recovery do not open or extend traces.
+Old traces are not merged; an older unfinished workflow starts tracing from its
+next explicit resume if it has no saved parent yet.
+
+Trace inputs/outputs include the request, fictional employee/policy data, and
+workflow results. Known credentials, authorization headers, serialized client
+configuration, and separate model reasoning are redacted before trace writes.
+Tracing setup failures produce a sanitized warning and disable tracing; leave
+workflows remain usable. The application does not automatically retry leave
+submission when tracing fails.
+
+### Inspect saved traces with SmithDB v2
+
+The legacy run retrieval/query APIs stop working on January 31, 2027. Inspection
+now uses the SDK's async `runs.retrieve`, `runs.query`, and `runs.get_url` APIs.
+They require the project UUID, explicit uppercase field selection, and cursor
+pagination. Queries in this project require an explicit timezone-aware starting
+timestamp, avoiding the API's implicit 24-hour history window. The v2 documentation
+describes uppercase run types, but the APAC service returned lowercase `chain`
+for an existing trace during verification; this tool preserves server values.
+Run token/cost fields represent only that run; this tool
+does not calculate whole-trace aggregates from them.
+
+From the parent `LangGraph` folder, these commands inspect existing data only:
+
+```powershell
+.\langGraph_PoC\.venv\Scripts\python.exe -m langGraph_PoC.trace_inspection --run-id "RUN_UUID"
+.\langGraph_PoC\.venv\Scripts\python.exe -m langGraph_PoC.trace_inspection --thread-id "WORKFLOW_ID" --since "2026-11-01T00:00:00Z"
+```
+
+The existing agent/environment determines the project UUID. The query's POST is
+a read operation. Neither command starts the graph, calls Ollama, submits leave,
+or creates traces. New v2 error classes come from `langsmith`, such as
+`NotFoundError`, `PermissionDeniedError`, and `APITimeoutError`.
+
+See the [run retrieval migration](https://docs.langchain.com/langsmith/smithdb-sdk-migration-runs)
+and [run query migration](https://docs.langchain.com/langsmith/smithdb-sdk-migration-query-runs).
+
 ## Tests
 
 From the parent `LangGraph` directory, after installing the requirements:

@@ -32,7 +32,10 @@ async def open_checkpointer(path: Path = CHECKPOINT_FILE):
 def thread_config(thread_id: str) -> dict:
     if not thread_id or not thread_id.strip():
         raise WorkflowPersistenceError("A nonblank workflow thread ID is required.")
-    return {"configurable": {"thread_id": thread_id}, "recursion_limit": 100}
+    from langGraph_PoC.tracing import tracing_config
+
+    return {"configurable": {"thread_id": thread_id}, "recursion_limit": 100,
+            "metadata": {"thread_id": thread_id}, **tracing_config()}
 
 
 async def load_thread(graph, thread_id: str, *, conversation_id: str | None = None):
