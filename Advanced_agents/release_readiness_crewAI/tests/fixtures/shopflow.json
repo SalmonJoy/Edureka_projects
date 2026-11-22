@@ -1,0 +1,1312 @@
+{
+  "GET /releases": [
+    {
+      "id": "rel-100",
+      "version": "1.0.0",
+      "title": "Shopflow 1.0.0",
+      "description": "Fictional candidate covering catalog, cart, checkout, payments, inventory, and orders.",
+      "initial_scenario": "ready"
+    },
+    {
+      "id": "rel-110",
+      "version": "1.1.0",
+      "title": "Shopflow 1.1.0",
+      "description": "Fictional candidate covering catalog, cart, checkout, payments, inventory, and orders.",
+      "initial_scenario": "needs_attention"
+    },
+    {
+      "id": "rel-120",
+      "version": "1.2.0",
+      "title": "Shopflow 1.2.0",
+      "description": "Fictional candidate covering catalog, cart, checkout, payments, inventory, and orders.",
+      "initial_scenario": "blocked"
+    }
+  ],
+  "GET /deployment-rules/staging": {
+    "environment": "staging",
+    "min_test_pass_rate": 80,
+    "all_critical_tests_passed": true,
+    "blocked_bug_severities": [
+      "critical"
+    ],
+    "blocked_finding_severities": [
+      "critical"
+    ],
+    "required_security_checks_passed": true,
+    "require_complete_docs": false,
+    "require_approved_notes": false
+  },
+  "GET /deployment-rules/production": {
+    "environment": "production",
+    "min_test_pass_rate": 100,
+    "all_critical_tests_passed": true,
+    "blocked_bug_severities": [
+      "critical",
+      "high"
+    ],
+    "blocked_finding_severities": [
+      "critical",
+      "high"
+    ],
+    "required_security_checks_passed": true,
+    "require_complete_docs": true,
+    "require_approved_notes": true
+  },
+  "GET /releases/rel-100": {
+    "id": "rel-100",
+    "version": "1.0.0",
+    "title": "Shopflow 1.0.0",
+    "description": "Fictional candidate covering catalog, cart, checkout, payments, inventory, and orders.",
+    "initial_scenario": "ready"
+  },
+  "GET /releases/rel-100/tests": [
+    {
+      "id": "TEST-001",
+      "release_id": "rel-100",
+      "name": "Catalog search returns matching products",
+      "module": "catalog",
+      "suite": "unit",
+      "critical": false,
+      "status": "passed",
+      "duration_ms": 40,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-002",
+      "release_id": "rel-100",
+      "name": "Cart retains selected quantities",
+      "module": "cart",
+      "suite": "unit",
+      "critical": true,
+      "status": "passed",
+      "duration_ms": 57,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-003",
+      "release_id": "rel-100",
+      "name": "Checkout calculates the order total",
+      "module": "checkout",
+      "suite": "e2e",
+      "critical": true,
+      "status": "passed",
+      "duration_ms": 74,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-004",
+      "release_id": "rel-100",
+      "name": "Payment capture creates one charge",
+      "module": "payments",
+      "suite": "integration",
+      "critical": true,
+      "status": "passed",
+      "duration_ms": 91,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-005",
+      "release_id": "rel-100",
+      "name": "Inventory reservation prevents overselling",
+      "module": "inventory",
+      "suite": "integration",
+      "critical": true,
+      "status": "passed",
+      "duration_ms": 108,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-006",
+      "release_id": "rel-100",
+      "name": "Order creation saves the receipt",
+      "module": "orders",
+      "suite": "e2e",
+      "critical": true,
+      "status": "passed",
+      "duration_ms": 125,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-007",
+      "release_id": "rel-100",
+      "name": "Refund updates the payment record",
+      "module": "payments",
+      "suite": "integration",
+      "critical": false,
+      "status": "passed",
+      "duration_ms": 142,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-008",
+      "release_id": "rel-100",
+      "name": "Coupon applies to eligible products",
+      "module": "checkout",
+      "suite": "unit",
+      "critical": false,
+      "status": "passed",
+      "duration_ms": 159,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-009",
+      "release_id": "rel-100",
+      "name": "Order notification contains the receipt",
+      "module": "orders",
+      "suite": "integration",
+      "critical": false,
+      "status": "passed",
+      "duration_ms": 176,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-010",
+      "release_id": "rel-100",
+      "name": "Catalog sorting respects the selected order",
+      "module": "catalog",
+      "suite": "unit",
+      "critical": false,
+      "status": "passed",
+      "duration_ms": 193,
+      "failure_reason": null
+    }
+  ],
+  "GET /releases/rel-100/tests/summary": {
+    "total": 10,
+    "passed": 10,
+    "failed": 0,
+    "skipped": 0,
+    "pass_rate": 100.0,
+    "critical_total": 5,
+    "critical_passed": 5
+  },
+  "GET /releases/rel-100/bugs": [
+    {
+      "id": "BUG-001",
+      "release_id": "rel-100",
+      "title": "Duplicate charge on checkout retry",
+      "description": "A simulated retry can submit the same charge twice.",
+      "module": "payments",
+      "severity": "critical",
+      "status": "resolved"
+    },
+    {
+      "id": "BUG-002",
+      "release_id": "rel-100",
+      "title": "Stock count lags after reservation",
+      "description": "A simulated inventory race exposes stale stock counts.",
+      "module": "inventory",
+      "severity": "high",
+      "status": "resolved"
+    },
+    {
+      "id": "BUG-003",
+      "release_id": "rel-100",
+      "title": "Coupon label is inconsistent",
+      "description": "The displayed coupon label differs between cart and checkout.",
+      "module": "checkout",
+      "severity": "medium",
+      "status": "resolved"
+    },
+    {
+      "id": "BUG-004",
+      "release_id": "rel-100",
+      "title": "Receipt spacing needs adjustment",
+      "description": "A cosmetic spacing issue affects the order receipt.",
+      "module": "orders",
+      "severity": "low",
+      "status": "open"
+    }
+  ],
+  "GET /releases/rel-100/security/report": {
+    "total_checks": 4,
+    "passed_checks": 4,
+    "failed_checks": 0,
+    "not_run_checks": 0,
+    "required_checks": 4,
+    "required_passed": 4,
+    "total_findings": 3,
+    "unresolved_findings": 0,
+    "open_findings_by_severity": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "release_id": "rel-100",
+    "checks": [
+      {
+        "id": "SEC-001",
+        "release_id": "rel-100",
+        "name": "Static code analysis",
+        "required": true,
+        "status": "passed",
+        "details": "Simulated check execution completed; review findings separately."
+      },
+      {
+        "id": "SEC-002",
+        "release_id": "rel-100",
+        "name": "Dependency scan",
+        "required": true,
+        "status": "passed",
+        "details": "Simulated check execution completed; review findings separately."
+      },
+      {
+        "id": "SEC-003",
+        "release_id": "rel-100",
+        "name": "Secret scan",
+        "required": true,
+        "status": "passed",
+        "details": "Simulated check execution completed; review findings separately."
+      },
+      {
+        "id": "SEC-004",
+        "release_id": "rel-100",
+        "name": "Configuration review",
+        "required": true,
+        "status": "passed",
+        "details": "Simulated check execution completed; review findings separately."
+      }
+    ],
+    "findings": [
+      {
+        "id": "FIND-001",
+        "release_id": "rel-100",
+        "check_id": "SEC-002",
+        "title": "Critical dependency finding",
+        "description": "Fictional package risk requiring a patched dependency.",
+        "severity": "critical",
+        "status": "resolved"
+      },
+      {
+        "id": "FIND-002",
+        "release_id": "rel-100",
+        "check_id": "SEC-004",
+        "title": "Overly broad service permissions",
+        "description": "A fictional service role has excessive permissions.",
+        "severity": "high",
+        "status": "resolved"
+      },
+      {
+        "id": "FIND-003",
+        "release_id": "rel-100",
+        "check_id": "SEC-001",
+        "title": "Verbose error information",
+        "description": "A simulated error handler exposes unnecessary internal details.",
+        "severity": "medium",
+        "status": "resolved"
+      }
+    ]
+  },
+  "GET /releases/rel-100/documents": [
+    {
+      "id": "DOC-001",
+      "release_id": "rel-100",
+      "title": "User guide",
+      "description": "Shopping, checkout, refunds, and customer-facing changes.",
+      "required": true,
+      "status": "complete"
+    },
+    {
+      "id": "DOC-002",
+      "release_id": "rel-100",
+      "title": "API documentation",
+      "description": "Request/response examples for changed Shopflow endpoints.",
+      "required": true,
+      "status": "complete"
+    },
+    {
+      "id": "DOC-003",
+      "release_id": "rel-100",
+      "title": "Deployment runbook",
+      "description": "Preparation, rollout steps, and post-release verification.",
+      "required": true,
+      "status": "complete"
+    },
+    {
+      "id": "DOC-004",
+      "release_id": "rel-100",
+      "title": "Rollback plan",
+      "description": "Backout steps and verification of the previous version.",
+      "required": true,
+      "status": "complete"
+    }
+  ],
+  "GET /releases/rel-100/release-notes": {
+    "release_id": "rel-100",
+    "status": "approved",
+    "content": "# Shopflow 1.0.0\n\n- Updated checkout validation.\n- Improved inventory reservation handling.\n- Refined payment and order receipts.\n\nFictional release notes for the learning simulator."
+  },
+  "POST /releases/rel-100/deployment-check staging": {
+    "release_id": "rel-100",
+    "environment": "staging",
+    "ready": true,
+    "passed_gates": 7,
+    "total_gates": 7,
+    "gates": [
+      {
+        "id": "test_pass_rate",
+        "name": "Test pass rate",
+        "passed": true,
+        "expected": "At least 80% passed, with at least one test; skipped tests count in total.",
+        "actual": "10/10 passed (100.0%); 0 failed, 0 skipped.",
+        "reason": "Pass-rate requirement met."
+      },
+      {
+        "id": "critical_tests",
+        "name": "Critical tests",
+        "passed": true,
+        "expected": "At least one critical test and every critical test passed.",
+        "actual": "5/5 critical tests passed.",
+        "reason": "Critical flows passed."
+      },
+      {
+        "id": "bugs",
+        "name": "Unresolved bugs",
+        "passed": true,
+        "expected": "No unresolved critical bugs.",
+        "actual": "None blocking.",
+        "reason": "Bug gate passed."
+      },
+      {
+        "id": "security_findings",
+        "name": "Security findings",
+        "passed": true,
+        "expected": "No open critical findings.",
+        "actual": "None blocking.",
+        "reason": "Finding gate passed."
+      },
+      {
+        "id": "security_checks",
+        "name": "Required security checks",
+        "passed": true,
+        "expected": "Required checks exist and all completed successfully; findings are evaluated separately.",
+        "actual": "4 required checks passed.",
+        "reason": "Security execution evidence is complete."
+      },
+      {
+        "id": "documentation",
+        "name": "Required documentation",
+        "passed": true,
+        "expected": "Documentation gaps are advisory in staging.",
+        "actual": "4/4 required documents complete; gaps: none.",
+        "reason": "Documentation policy satisfied."
+      },
+      {
+        "id": "release_notes",
+        "name": "Release notes",
+        "passed": true,
+        "expected": "Unapproved notes are advisory in staging.",
+        "actual": "approved",
+        "reason": "Release-note policy satisfied."
+      }
+    ],
+    "warnings": []
+  },
+  "POST /releases/rel-100/deployment-check production": {
+    "release_id": "rel-100",
+    "environment": "production",
+    "ready": true,
+    "passed_gates": 7,
+    "total_gates": 7,
+    "gates": [
+      {
+        "id": "test_pass_rate",
+        "name": "Test pass rate",
+        "passed": true,
+        "expected": "At least 100% passed, with at least one test; skipped tests count in total.",
+        "actual": "10/10 passed (100.0%); 0 failed, 0 skipped.",
+        "reason": "Pass-rate requirement met."
+      },
+      {
+        "id": "critical_tests",
+        "name": "Critical tests",
+        "passed": true,
+        "expected": "At least one critical test and every critical test passed.",
+        "actual": "5/5 critical tests passed.",
+        "reason": "Critical flows passed."
+      },
+      {
+        "id": "bugs",
+        "name": "Unresolved bugs",
+        "passed": true,
+        "expected": "No unresolved critical/high bugs.",
+        "actual": "None blocking.",
+        "reason": "Bug gate passed."
+      },
+      {
+        "id": "security_findings",
+        "name": "Security findings",
+        "passed": true,
+        "expected": "No open critical/high findings.",
+        "actual": "None blocking.",
+        "reason": "Finding gate passed."
+      },
+      {
+        "id": "security_checks",
+        "name": "Required security checks",
+        "passed": true,
+        "expected": "Required checks exist and all completed successfully; findings are evaluated separately.",
+        "actual": "4 required checks passed.",
+        "reason": "Security execution evidence is complete."
+      },
+      {
+        "id": "documentation",
+        "name": "Required documentation",
+        "passed": true,
+        "expected": "Every required document complete.",
+        "actual": "4/4 required documents complete; gaps: none.",
+        "reason": "Documentation policy satisfied."
+      },
+      {
+        "id": "release_notes",
+        "name": "Release notes",
+        "passed": true,
+        "expected": "Release notes approved.",
+        "actual": "approved",
+        "reason": "Release-note policy satisfied."
+      }
+    ],
+    "warnings": []
+  },
+  "GET /releases/rel-110": {
+    "id": "rel-110",
+    "version": "1.1.0",
+    "title": "Shopflow 1.1.0",
+    "description": "Fictional candidate covering catalog, cart, checkout, payments, inventory, and orders.",
+    "initial_scenario": "needs_attention"
+  },
+  "GET /releases/rel-110/tests": [
+    {
+      "id": "TEST-001",
+      "release_id": "rel-110",
+      "name": "Catalog search returns matching products",
+      "module": "catalog",
+      "suite": "unit",
+      "critical": false,
+      "status": "passed",
+      "duration_ms": 40,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-002",
+      "release_id": "rel-110",
+      "name": "Cart retains selected quantities",
+      "module": "cart",
+      "suite": "unit",
+      "critical": true,
+      "status": "passed",
+      "duration_ms": 57,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-003",
+      "release_id": "rel-110",
+      "name": "Checkout calculates the order total",
+      "module": "checkout",
+      "suite": "e2e",
+      "critical": true,
+      "status": "passed",
+      "duration_ms": 74,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-004",
+      "release_id": "rel-110",
+      "name": "Payment capture creates one charge",
+      "module": "payments",
+      "suite": "integration",
+      "critical": true,
+      "status": "passed",
+      "duration_ms": 91,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-005",
+      "release_id": "rel-110",
+      "name": "Inventory reservation prevents overselling",
+      "module": "inventory",
+      "suite": "integration",
+      "critical": true,
+      "status": "passed",
+      "duration_ms": 108,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-006",
+      "release_id": "rel-110",
+      "name": "Order creation saves the receipt",
+      "module": "orders",
+      "suite": "e2e",
+      "critical": true,
+      "status": "passed",
+      "duration_ms": 125,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-007",
+      "release_id": "rel-110",
+      "name": "Refund updates the payment record",
+      "module": "payments",
+      "suite": "integration",
+      "critical": false,
+      "status": "passed",
+      "duration_ms": 142,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-008",
+      "release_id": "rel-110",
+      "name": "Coupon applies to eligible products",
+      "module": "checkout",
+      "suite": "unit",
+      "critical": false,
+      "status": "passed",
+      "duration_ms": 159,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-009",
+      "release_id": "rel-110",
+      "name": "Order notification contains the receipt",
+      "module": "orders",
+      "suite": "integration",
+      "critical": false,
+      "status": "skipped",
+      "duration_ms": 0,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-010",
+      "release_id": "rel-110",
+      "name": "Catalog sorting respects the selected order",
+      "module": "catalog",
+      "suite": "unit",
+      "critical": false,
+      "status": "failed",
+      "duration_ms": 193,
+      "failure_reason": "Simulated assertion failure: catalog sorting respects the selected order."
+    }
+  ],
+  "GET /releases/rel-110/tests/summary": {
+    "total": 10,
+    "passed": 8,
+    "failed": 1,
+    "skipped": 1,
+    "pass_rate": 80.0,
+    "critical_total": 5,
+    "critical_passed": 5
+  },
+  "GET /releases/rel-110/bugs": [
+    {
+      "id": "BUG-001",
+      "release_id": "rel-110",
+      "title": "Duplicate charge on checkout retry",
+      "description": "A simulated retry can submit the same charge twice.",
+      "module": "payments",
+      "severity": "critical",
+      "status": "resolved"
+    },
+    {
+      "id": "BUG-002",
+      "release_id": "rel-110",
+      "title": "Stock count lags after reservation",
+      "description": "A simulated inventory race exposes stale stock counts.",
+      "module": "inventory",
+      "severity": "high",
+      "status": "open"
+    },
+    {
+      "id": "BUG-003",
+      "release_id": "rel-110",
+      "title": "Coupon label is inconsistent",
+      "description": "The displayed coupon label differs between cart and checkout.",
+      "module": "checkout",
+      "severity": "medium",
+      "status": "in_progress"
+    },
+    {
+      "id": "BUG-004",
+      "release_id": "rel-110",
+      "title": "Receipt spacing needs adjustment",
+      "description": "A cosmetic spacing issue affects the order receipt.",
+      "module": "orders",
+      "severity": "low",
+      "status": "resolved"
+    }
+  ],
+  "GET /releases/rel-110/security/report": {
+    "total_checks": 4,
+    "passed_checks": 4,
+    "failed_checks": 0,
+    "not_run_checks": 0,
+    "required_checks": 4,
+    "required_passed": 4,
+    "total_findings": 3,
+    "unresolved_findings": 1,
+    "open_findings_by_severity": {
+      "critical": 0,
+      "high": 0,
+      "medium": 1,
+      "low": 0
+    },
+    "release_id": "rel-110",
+    "checks": [
+      {
+        "id": "SEC-001",
+        "release_id": "rel-110",
+        "name": "Static code analysis",
+        "required": true,
+        "status": "passed",
+        "details": "Simulated check execution completed; review findings separately."
+      },
+      {
+        "id": "SEC-002",
+        "release_id": "rel-110",
+        "name": "Dependency scan",
+        "required": true,
+        "status": "passed",
+        "details": "Simulated check execution completed; review findings separately."
+      },
+      {
+        "id": "SEC-003",
+        "release_id": "rel-110",
+        "name": "Secret scan",
+        "required": true,
+        "status": "passed",
+        "details": "Simulated check execution completed; review findings separately."
+      },
+      {
+        "id": "SEC-004",
+        "release_id": "rel-110",
+        "name": "Configuration review",
+        "required": true,
+        "status": "passed",
+        "details": "Simulated check execution completed; review findings separately."
+      }
+    ],
+    "findings": [
+      {
+        "id": "FIND-001",
+        "release_id": "rel-110",
+        "check_id": "SEC-002",
+        "title": "Critical dependency finding",
+        "description": "Fictional package risk requiring a patched dependency.",
+        "severity": "critical",
+        "status": "resolved"
+      },
+      {
+        "id": "FIND-002",
+        "release_id": "rel-110",
+        "check_id": "SEC-004",
+        "title": "Overly broad service permissions",
+        "description": "A fictional service role has excessive permissions.",
+        "severity": "high",
+        "status": "resolved"
+      },
+      {
+        "id": "FIND-003",
+        "release_id": "rel-110",
+        "check_id": "SEC-001",
+        "title": "Verbose error information",
+        "description": "A simulated error handler exposes unnecessary internal details.",
+        "severity": "medium",
+        "status": "open"
+      }
+    ]
+  },
+  "GET /releases/rel-110/documents": [
+    {
+      "id": "DOC-001",
+      "release_id": "rel-110",
+      "title": "User guide",
+      "description": "Shopping, checkout, refunds, and customer-facing changes.",
+      "required": true,
+      "status": "complete"
+    },
+    {
+      "id": "DOC-002",
+      "release_id": "rel-110",
+      "title": "API documentation",
+      "description": "Request/response examples for changed Shopflow endpoints.",
+      "required": true,
+      "status": "in_review"
+    },
+    {
+      "id": "DOC-003",
+      "release_id": "rel-110",
+      "title": "Deployment runbook",
+      "description": "Preparation, rollout steps, and post-release verification.",
+      "required": true,
+      "status": "complete"
+    },
+    {
+      "id": "DOC-004",
+      "release_id": "rel-110",
+      "title": "Rollback plan",
+      "description": "Backout steps and verification of the previous version.",
+      "required": true,
+      "status": "draft"
+    }
+  ],
+  "GET /releases/rel-110/release-notes": {
+    "release_id": "rel-110",
+    "status": "draft",
+    "content": "# Shopflow 1.1.0\n\n- Updated checkout validation.\n- Improved inventory reservation handling.\n- Refined payment and order receipts.\n\nFictional release notes for the learning simulator."
+  },
+  "POST /releases/rel-110/deployment-check staging": {
+    "release_id": "rel-110",
+    "environment": "staging",
+    "ready": true,
+    "passed_gates": 7,
+    "total_gates": 7,
+    "gates": [
+      {
+        "id": "test_pass_rate",
+        "name": "Test pass rate",
+        "passed": true,
+        "expected": "At least 80% passed, with at least one test; skipped tests count in total.",
+        "actual": "8/10 passed (80.0%); 1 failed, 1 skipped.",
+        "reason": "Pass-rate requirement met."
+      },
+      {
+        "id": "critical_tests",
+        "name": "Critical tests",
+        "passed": true,
+        "expected": "At least one critical test and every critical test passed.",
+        "actual": "5/5 critical tests passed.",
+        "reason": "Critical flows passed."
+      },
+      {
+        "id": "bugs",
+        "name": "Unresolved bugs",
+        "passed": true,
+        "expected": "No unresolved critical bugs.",
+        "actual": "None blocking.",
+        "reason": "Bug gate passed."
+      },
+      {
+        "id": "security_findings",
+        "name": "Security findings",
+        "passed": true,
+        "expected": "No open critical findings.",
+        "actual": "None blocking.",
+        "reason": "Finding gate passed."
+      },
+      {
+        "id": "security_checks",
+        "name": "Required security checks",
+        "passed": true,
+        "expected": "Required checks exist and all completed successfully; findings are evaluated separately.",
+        "actual": "4 required checks passed.",
+        "reason": "Security execution evidence is complete."
+      },
+      {
+        "id": "documentation",
+        "name": "Required documentation",
+        "passed": true,
+        "expected": "Documentation gaps are advisory in staging.",
+        "actual": "2/4 required documents complete; gaps: DOC-002, DOC-004.",
+        "reason": "Documentation policy satisfied."
+      },
+      {
+        "id": "release_notes",
+        "name": "Release notes",
+        "passed": true,
+        "expected": "Unapproved notes are advisory in staging.",
+        "actual": "draft",
+        "reason": "Release-note policy satisfied."
+      }
+    ],
+    "warnings": [
+      "Required documentation is incomplete; staging permits this gap.",
+      "Release notes are not approved; staging permits this gap."
+    ]
+  },
+  "POST /releases/rel-110/deployment-check production": {
+    "release_id": "rel-110",
+    "environment": "production",
+    "ready": false,
+    "passed_gates": 3,
+    "total_gates": 7,
+    "gates": [
+      {
+        "id": "test_pass_rate",
+        "name": "Test pass rate",
+        "passed": false,
+        "expected": "At least 100% passed, with at least one test; skipped tests count in total.",
+        "actual": "8/10 passed (80.0%); 1 failed, 1 skipped.",
+        "reason": "Insufficient passing test evidence."
+      },
+      {
+        "id": "critical_tests",
+        "name": "Critical tests",
+        "passed": true,
+        "expected": "At least one critical test and every critical test passed.",
+        "actual": "5/5 critical tests passed.",
+        "reason": "Critical flows passed."
+      },
+      {
+        "id": "bugs",
+        "name": "Unresolved bugs",
+        "passed": false,
+        "expected": "No unresolved critical/high bugs.",
+        "actual": "BUG-002 (high, open)",
+        "reason": "Resolve or reassess the listed bugs."
+      },
+      {
+        "id": "security_findings",
+        "name": "Security findings",
+        "passed": true,
+        "expected": "No open critical/high findings.",
+        "actual": "None blocking.",
+        "reason": "Finding gate passed."
+      },
+      {
+        "id": "security_checks",
+        "name": "Required security checks",
+        "passed": true,
+        "expected": "Required checks exist and all completed successfully; findings are evaluated separately.",
+        "actual": "4 required checks passed.",
+        "reason": "Security execution evidence is complete."
+      },
+      {
+        "id": "documentation",
+        "name": "Required documentation",
+        "passed": false,
+        "expected": "Every required document complete.",
+        "actual": "2/4 required documents complete; gaps: DOC-002, DOC-004.",
+        "reason": "Complete the required guides and runbooks."
+      },
+      {
+        "id": "release_notes",
+        "name": "Release notes",
+        "passed": false,
+        "expected": "Release notes approved.",
+        "actual": "draft",
+        "reason": "Review and approve the release notes."
+      }
+    ],
+    "warnings": []
+  },
+  "GET /releases/rel-120": {
+    "id": "rel-120",
+    "version": "1.2.0",
+    "title": "Shopflow 1.2.0",
+    "description": "Fictional candidate covering catalog, cart, checkout, payments, inventory, and orders.",
+    "initial_scenario": "blocked"
+  },
+  "GET /releases/rel-120/tests": [
+    {
+      "id": "TEST-001",
+      "release_id": "rel-120",
+      "name": "Catalog search returns matching products",
+      "module": "catalog",
+      "suite": "unit",
+      "critical": false,
+      "status": "passed",
+      "duration_ms": 40,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-002",
+      "release_id": "rel-120",
+      "name": "Cart retains selected quantities",
+      "module": "cart",
+      "suite": "unit",
+      "critical": true,
+      "status": "passed",
+      "duration_ms": 57,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-003",
+      "release_id": "rel-120",
+      "name": "Checkout calculates the order total",
+      "module": "checkout",
+      "suite": "e2e",
+      "critical": true,
+      "status": "passed",
+      "duration_ms": 74,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-004",
+      "release_id": "rel-120",
+      "name": "Payment capture creates one charge",
+      "module": "payments",
+      "suite": "integration",
+      "critical": true,
+      "status": "passed",
+      "duration_ms": 91,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-005",
+      "release_id": "rel-120",
+      "name": "Inventory reservation prevents overselling",
+      "module": "inventory",
+      "suite": "integration",
+      "critical": true,
+      "status": "failed",
+      "duration_ms": 108,
+      "failure_reason": "Simulated assertion failure: inventory reservation prevents overselling."
+    },
+    {
+      "id": "TEST-006",
+      "release_id": "rel-120",
+      "name": "Order creation saves the receipt",
+      "module": "orders",
+      "suite": "e2e",
+      "critical": true,
+      "status": "failed",
+      "duration_ms": 125,
+      "failure_reason": "Simulated assertion failure: order creation saves the receipt."
+    },
+    {
+      "id": "TEST-007",
+      "release_id": "rel-120",
+      "name": "Refund updates the payment record",
+      "module": "payments",
+      "suite": "integration",
+      "critical": false,
+      "status": "failed",
+      "duration_ms": 142,
+      "failure_reason": "Simulated assertion failure: refund updates the payment record."
+    },
+    {
+      "id": "TEST-008",
+      "release_id": "rel-120",
+      "name": "Coupon applies to eligible products",
+      "module": "checkout",
+      "suite": "unit",
+      "critical": false,
+      "status": "failed",
+      "duration_ms": 159,
+      "failure_reason": "Simulated assertion failure: coupon applies to eligible products."
+    },
+    {
+      "id": "TEST-009",
+      "release_id": "rel-120",
+      "name": "Order notification contains the receipt",
+      "module": "orders",
+      "suite": "integration",
+      "critical": false,
+      "status": "skipped",
+      "duration_ms": 0,
+      "failure_reason": null
+    },
+    {
+      "id": "TEST-010",
+      "release_id": "rel-120",
+      "name": "Catalog sorting respects the selected order",
+      "module": "catalog",
+      "suite": "unit",
+      "critical": false,
+      "status": "skipped",
+      "duration_ms": 0,
+      "failure_reason": null
+    }
+  ],
+  "GET /releases/rel-120/tests/summary": {
+    "total": 10,
+    "passed": 4,
+    "failed": 4,
+    "skipped": 2,
+    "pass_rate": 40.0,
+    "critical_total": 5,
+    "critical_passed": 3
+  },
+  "GET /releases/rel-120/bugs": [
+    {
+      "id": "BUG-001",
+      "release_id": "rel-120",
+      "title": "Duplicate charge on checkout retry",
+      "description": "A simulated retry can submit the same charge twice.",
+      "module": "payments",
+      "severity": "critical",
+      "status": "open"
+    },
+    {
+      "id": "BUG-002",
+      "release_id": "rel-120",
+      "title": "Stock count lags after reservation",
+      "description": "A simulated inventory race exposes stale stock counts.",
+      "module": "inventory",
+      "severity": "high",
+      "status": "open"
+    },
+    {
+      "id": "BUG-003",
+      "release_id": "rel-120",
+      "title": "Coupon label is inconsistent",
+      "description": "The displayed coupon label differs between cart and checkout.",
+      "module": "checkout",
+      "severity": "medium",
+      "status": "in_progress"
+    },
+    {
+      "id": "BUG-004",
+      "release_id": "rel-120",
+      "title": "Receipt spacing needs adjustment",
+      "description": "A cosmetic spacing issue affects the order receipt.",
+      "module": "orders",
+      "severity": "low",
+      "status": "open"
+    }
+  ],
+  "GET /releases/rel-120/security/report": {
+    "total_checks": 4,
+    "passed_checks": 2,
+    "failed_checks": 1,
+    "not_run_checks": 1,
+    "required_checks": 4,
+    "required_passed": 2,
+    "total_findings": 3,
+    "unresolved_findings": 3,
+    "open_findings_by_severity": {
+      "critical": 1,
+      "high": 1,
+      "medium": 1,
+      "low": 0
+    },
+    "release_id": "rel-120",
+    "checks": [
+      {
+        "id": "SEC-001",
+        "release_id": "rel-120",
+        "name": "Static code analysis",
+        "required": true,
+        "status": "passed",
+        "details": "Simulated check execution completed; review findings separately."
+      },
+      {
+        "id": "SEC-002",
+        "release_id": "rel-120",
+        "name": "Dependency scan",
+        "required": true,
+        "status": "failed",
+        "details": "Simulated scanner execution failed; evidence is incomplete."
+      },
+      {
+        "id": "SEC-003",
+        "release_id": "rel-120",
+        "name": "Secret scan",
+        "required": true,
+        "status": "not_run",
+        "details": "This simulated scan has not been executed."
+      },
+      {
+        "id": "SEC-004",
+        "release_id": "rel-120",
+        "name": "Configuration review",
+        "required": true,
+        "status": "passed",
+        "details": "Simulated check execution completed; review findings separately."
+      }
+    ],
+    "findings": [
+      {
+        "id": "FIND-001",
+        "release_id": "rel-120",
+        "check_id": "SEC-002",
+        "title": "Critical dependency finding",
+        "description": "Fictional package risk requiring a patched dependency.",
+        "severity": "critical",
+        "status": "open"
+      },
+      {
+        "id": "FIND-002",
+        "release_id": "rel-120",
+        "check_id": "SEC-004",
+        "title": "Overly broad service permissions",
+        "description": "A fictional service role has excessive permissions.",
+        "severity": "high",
+        "status": "open"
+      },
+      {
+        "id": "FIND-003",
+        "release_id": "rel-120",
+        "check_id": "SEC-001",
+        "title": "Verbose error information",
+        "description": "A simulated error handler exposes unnecessary internal details.",
+        "severity": "medium",
+        "status": "open"
+      }
+    ]
+  },
+  "GET /releases/rel-120/documents": [
+    {
+      "id": "DOC-001",
+      "release_id": "rel-120",
+      "title": "User guide",
+      "description": "Shopping, checkout, refunds, and customer-facing changes.",
+      "required": true,
+      "status": "draft"
+    },
+    {
+      "id": "DOC-002",
+      "release_id": "rel-120",
+      "title": "API documentation",
+      "description": "Request/response examples for changed Shopflow endpoints.",
+      "required": true,
+      "status": "in_review"
+    },
+    {
+      "id": "DOC-003",
+      "release_id": "rel-120",
+      "title": "Deployment runbook",
+      "description": "Preparation, rollout steps, and post-release verification.",
+      "required": true,
+      "status": "draft"
+    },
+    {
+      "id": "DOC-004",
+      "release_id": "rel-120",
+      "title": "Rollback plan",
+      "description": "Backout steps and verification of the previous version.",
+      "required": true,
+      "status": "draft"
+    }
+  ],
+  "GET /releases/rel-120/release-notes": {
+    "release_id": "rel-120",
+    "status": "draft",
+    "content": "# Shopflow 1.2.0\n\n- Updated checkout validation.\n- Improved inventory reservation handling.\n- Refined payment and order receipts.\n\nFictional release notes for the learning simulator."
+  },
+  "POST /releases/rel-120/deployment-check staging": {
+    "release_id": "rel-120",
+    "environment": "staging",
+    "ready": false,
+    "passed_gates": 2,
+    "total_gates": 7,
+    "gates": [
+      {
+        "id": "test_pass_rate",
+        "name": "Test pass rate",
+        "passed": false,
+        "expected": "At least 80% passed, with at least one test; skipped tests count in total.",
+        "actual": "4/10 passed (40.0%); 4 failed, 2 skipped.",
+        "reason": "Insufficient passing test evidence."
+      },
+      {
+        "id": "critical_tests",
+        "name": "Critical tests",
+        "passed": false,
+        "expected": "At least one critical test and every critical test passed.",
+        "actual": "3/5 critical tests passed.",
+        "reason": "A critical test failed, was skipped, or is missing."
+      },
+      {
+        "id": "bugs",
+        "name": "Unresolved bugs",
+        "passed": false,
+        "expected": "No unresolved critical bugs.",
+        "actual": "BUG-001 (critical, open)",
+        "reason": "Resolve or reassess the listed bugs."
+      },
+      {
+        "id": "security_findings",
+        "name": "Security findings",
+        "passed": false,
+        "expected": "No open critical findings.",
+        "actual": "FIND-001 (critical)",
+        "reason": "Resolve or reassess the listed findings."
+      },
+      {
+        "id": "security_checks",
+        "name": "Required security checks",
+        "passed": false,
+        "expected": "Required checks exist and all completed successfully; findings are evaluated separately.",
+        "actual": "SEC-002 (failed), SEC-003 (not_run)",
+        "reason": "Required scan/check evidence is incomplete."
+      },
+      {
+        "id": "documentation",
+        "name": "Required documentation",
+        "passed": true,
+        "expected": "Documentation gaps are advisory in staging.",
+        "actual": "0/4 required documents complete; gaps: DOC-001, DOC-002, DOC-003, DOC-004.",
+        "reason": "Documentation policy satisfied."
+      },
+      {
+        "id": "release_notes",
+        "name": "Release notes",
+        "passed": true,
+        "expected": "Unapproved notes are advisory in staging.",
+        "actual": "draft",
+        "reason": "Release-note policy satisfied."
+      }
+    ],
+    "warnings": [
+      "Required documentation is incomplete; staging permits this gap.",
+      "Release notes are not approved; staging permits this gap."
+    ]
+  },
+  "POST /releases/rel-120/deployment-check production": {
+    "release_id": "rel-120",
+    "environment": "production",
+    "ready": false,
+    "passed_gates": 0,
+    "total_gates": 7,
+    "gates": [
+      {
+        "id": "test_pass_rate",
+        "name": "Test pass rate",
+        "passed": false,
+        "expected": "At least 100% passed, with at least one test; skipped tests count in total.",
+        "actual": "4/10 passed (40.0%); 4 failed, 2 skipped.",
+        "reason": "Insufficient passing test evidence."
+      },
+      {
+        "id": "critical_tests",
+        "name": "Critical tests",
+        "passed": false,
+        "expected": "At least one critical test and every critical test passed.",
+        "actual": "3/5 critical tests passed.",
+        "reason": "A critical test failed, was skipped, or is missing."
+      },
+      {
+        "id": "bugs",
+        "name": "Unresolved bugs",
+        "passed": false,
+        "expected": "No unresolved critical/high bugs.",
+        "actual": "BUG-001 (critical, open), BUG-002 (high, open)",
+        "reason": "Resolve or reassess the listed bugs."
+      },
+      {
+        "id": "security_findings",
+        "name": "Security findings",
+        "passed": false,
+        "expected": "No open critical/high findings.",
+        "actual": "FIND-001 (critical), FIND-002 (high)",
+        "reason": "Resolve or reassess the listed findings."
+      },
+      {
+        "id": "security_checks",
+        "name": "Required security checks",
+        "passed": false,
+        "expected": "Required checks exist and all completed successfully; findings are evaluated separately.",
+        "actual": "SEC-002 (failed), SEC-003 (not_run)",
+        "reason": "Required scan/check evidence is incomplete."
+      },
+      {
+        "id": "documentation",
+        "name": "Required documentation",
+        "passed": false,
+        "expected": "Every required document complete.",
+        "actual": "0/4 required documents complete; gaps: DOC-001, DOC-002, DOC-003, DOC-004.",
+        "reason": "Complete the required guides and runbooks."
+      },
+      {
+        "id": "release_notes",
+        "name": "Release notes",
+        "passed": false,
+        "expected": "Release notes approved.",
+        "actual": "draft",
+        "reason": "Review and approve the release notes."
+      }
+    ],
+    "warnings": []
+  }
+}

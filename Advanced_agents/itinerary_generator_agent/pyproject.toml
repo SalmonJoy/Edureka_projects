@@ -1,0 +1,20 @@
+[project]
+name = "itinerary-generator-agent"
+version = "0.1.0"
+description = "A learning-focused LangGraph itinerary planner with reflection and Qdrant memory"
+requires-python = ">=3.11"
+dependencies = [
+    "langgraph>=1,<2",
+    "langchain-openai>=1,<2",
+    "qdrant-client>=1.12,<2",
+    "python-dotenv>=1,<2",
+    "httpx>=0.28,<1",
+    "streamlit>=1.40,<2",
+]
+
+[dependency-groups]
+dev = ["pytest>=8,<10"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
